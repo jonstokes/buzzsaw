@@ -10,8 +10,25 @@ class QueryDoc
 end
 
 RSpec.describe Riffler do
+
+  let(:file_name) { 'sample.html' }
+  let(:base_doc)  {
+    File.open(File.join('spec', 'fixtures', 'sample.html')) { |f| Nokogiri::HTML(f.read) }
+  }
+  let(:doc)       { QueryDoc.new(base_doc) }
+
   describe "#find_by_xpath" do
-    it "does stuff" do
+    it "finds the first matching node by xpath" do
+      result = doc.find_by_xpath(xpath: "//div[@class='container']//li")
+      expect(result).to eq("First")
+    end
+
+    it "takes a match argument" do
+      result = doc.find_by_xpath(
+        xpath: "//div[@class='container']//li",
+        match: /second/i
+      )
+      expect(result).to eq("Second")
     end
   end
 end
