@@ -56,7 +56,13 @@ module Riffler
 
     # Rows match first
     return unless row = match_table_element(table, "tr", match_row, row_index)
-    return row.text unless match_column || column_index
+    unless match_column || column_index
+      if capture
+        return row.text[capture]
+      else
+        return row.text
+      end
+    end
 
     # Now columns
     return unless col = match_table_element(row, "td", match_column, column_index)
