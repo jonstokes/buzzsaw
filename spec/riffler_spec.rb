@@ -20,7 +20,15 @@ RSpec.describe Riffler do
   describe "#find_by_xpath" do
     it "finds the first matching node by xpath" do
       result = doc.find_by_xpath(xpath: "//div[@class='container']//li")
-      expect(result).to eq("First")
+      expect(result).to eq("First Item")
+    end
+
+    it "takes a pattern argument" do
+      result = doc.find_by_xpath(
+        xpath:   "//div[@class='container']//li",
+        pattern: /second/i
+      )
+      expect(result).to eq("Second")
     end
 
     it "takes a match argument" do
@@ -28,7 +36,33 @@ RSpec.describe Riffler do
         xpath: "//div[@class='container']//li",
         match: /second/i
       )
-      expect(result).to eq("Second")
+      expect(result).to eq("Second Item")
+    end
+
+    it "takes a capture argument" do
+      result = doc.find_by_xpath(
+        xpath:   "//div[@class='container']//li",
+        capture: /first/i
+      )
+      expect(result).to eq("First")
+    end
+
+    it "takes match and capture arguments together" do
+      result = doc.find_by_xpath(
+        xpath:   "//div[@class='container']//li",
+        match:   /Third/,
+        capture: /item/i
+      )
+      expect(result).to eq("Item")
+    end
+
+    it "takes a label argument" do
+      result = doc.find_by_xpath(
+        xpath: "//div[@class='container']//li",
+        match: /Third/,
+        label: "Foo"
+      )
+      expect(result).to eq("Foo")
     end
   end
 end

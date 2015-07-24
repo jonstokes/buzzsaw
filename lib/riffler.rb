@@ -11,7 +11,7 @@ module Riffler
   def find_by_xpath(args)
     args.symbolize_keys!
     args[:match] = args[:capture] = args[:pattern] if args[:pattern]
-    return bc_find_by_xpath(args) if args[:all_nodes]
+    return bc_find_by_xpath(args) if args[:all_nodes] # backwards compatibility
 
     nodes = get_nodes(args)
     target = find_target_text(args, nodes)
