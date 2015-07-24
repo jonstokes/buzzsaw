@@ -1,6 +1,6 @@
 # Riffler
 
-TODO: Write a gem description
+A DSL that wraps around `Nokogiri` and is used by stretched.io for web scraping.
 
 ## Installation
 
