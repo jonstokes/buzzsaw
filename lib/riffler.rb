@@ -1,6 +1,9 @@
 require "riffler/version"
 
 module Riffler
+
+  ENCODING_EXCEPTION = defined?(Java) ? Java::JavaNioCharset::UnsupportedCharsetException : Encoding::CompatibilityError
+
   #
   # Doc query methods
   #
@@ -176,7 +179,7 @@ module Riffler
 
     # Filter match with the :capture regex
     capture_target_text(result, args[:capture])
-  rescue Java::JavaNioCharset::UnsupportedCharsetException
+  rescue ENCODING_EXCEPTION
   end
 
   def collect_target_text(args, nodes)
@@ -187,7 +190,7 @@ module Riffler
 
     # Filter the string with the :capture regex
     capture_target_text(result, args[:capture])
-  rescue Java::JavaNioCharset::UnsupportedCharsetException
+  rescue ENCODING_EXCEPTION
   end
 
   def match_target_text!(nodes, pattern)
