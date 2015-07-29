@@ -5,20 +5,18 @@ module Riffler
   ENCODING_EXCEPTION = defined?(Java) ? Java::JavaNioCharset::UnsupportedCharsetException : Encoding::CompatibilityError
 
   #
-  # Doc query methods
+  # Main DSL methods
   #
 
   def find_by_xpath(args)
     args.symbolize_keys!
     args[:match] = args[:capture] = args[:pattern] if args[:pattern]
-    return bc_find_by_xpath(args) if args[:all_nodes] # backwards compatibility
 
     nodes = get_nodes(args)
     target = find_target_text(args, nodes)
     return args[:label] if args[:label] && target.present?
     asciify_target_text(target)
   end
-  alias_method :label_by_xpath, :find_by_xpath # label_by_ is depreciated
 
   def collect_by_xpath(args)
     args.symbolize_keys!
@@ -69,13 +67,6 @@ module Riffler
 
     return col.text unless capture
     col.text[capture]
-  end
-
-  def match_table_element(table, element, match, index)
-    row = nil
-    row = table.xpath(".//#{element}").detect { |r| r.text && r.text[match] } if match
-    row ||= table.xpath(".//#{element}[#{index}]") if index
-    row
   end
 
   def find_by_meta_tag(args)
@@ -172,9 +163,11 @@ module Riffler
   # Private
   #
 
-  def bc_find_by_xpath(args)
-    args[:include] = args[:pattern]
-    collect_by_xpath(args)
+  def match_table_element(table, element, match, index)
+    row = nil
+    row = table.xpath(".//#{element}").detect { |r| r.text && r.text[match] } if match
+    row ||= table.xpath(".//#{element}[#{index}]") if index
+    row
   end
 
   def find_target_text(args, nodes)
