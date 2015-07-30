@@ -1,23 +1,12 @@
 require 'spec_helper'
 
-class QueryDoc
-  include Buzzsaw
-  attr_reader :doc
-  attr_reader :url
-
-  def initialize(doc)
-    @doc = doc
-    @url = "http://stretched.io/1"
-  end
-end
-
-RSpec.describe Buzzsaw do
+RSpec.describe Buzzsaw::DSL do
 
   let(:file_name) { 'sample.html' }
-  let(:base_doc)  {
-    File.open(File.join('spec', 'fixtures', 'sample.html')) { |f| Nokogiri::HTML(f.read) }
+  let(:source) {
+    File.open(File.join('spec', 'fixtures', 'sample.html')) { |f| f.read }
   }
-  let(:doc)       { QueryDoc.new(base_doc) }
+  let(:doc)       { Buzzsaw::Document.new(source, format: :html) }
 
   describe "#find_by_xpath" do
     it "finds the first matching node by xpath" do

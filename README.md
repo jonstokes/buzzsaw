@@ -16,11 +16,12 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install Buzzsaw
+    $ gem install buzzsaw
 
 ## Usage
 
-TODO: Write usage instructions here
+This gem is what stretched.io uses for its DSL -- both the JSON-based one and the
+scripting one. You can use it independently, though.
 
 ## Query DSL
 
@@ -39,9 +40,7 @@ This method takes the following arguments:
 
 Here's a look at how `find_by_xpath` works in practice.
 
-**Example**
-
-Let's say that you want to extract the price of `product2` from the following bit of HTML:
+Let's say that you want to extract the price of `product2` from the following bit of HTML in `products.html`:
 
  ```html
  <div id="product1-details">
@@ -63,7 +62,10 @@ Let's say that you want to extract the price of `product2` from the following bi
  ```
 You might use `find_by_xpath` as follows:
 ```ruby
-find_by_xpath(
+source = File.open { |f| f.read("products.html") }
+buzz = Buzzsaw::Document.new(source, format: :html)
+
+buzz.find_by_xpath(
   xpath: '//div[@id="product2-details"]//li',
   pattern: /\$[0-9]+\.[0-9]+/
 )
@@ -72,7 +74,7 @@ find_by_xpath(
 If for whatever reason you wanted that entire price node, you could do:
 
 ```ruby
-find_by_xpath(
+buzz.find_by_xpath(
   xpath: '//div[@id="product2-details"]//li',
   match: /\$[0-9]+\.[0-9]+/
 )
@@ -81,7 +83,7 @@ find_by_xpath(
 Now let's say that you only want "12.99", without the dollar sign. You could do
 that as follows:
 ```ruby
-find_by_xpath(
+buzz.find_by_xpath(
   xpath: '//div[@id="product2-details"]//li',
   match: /\$[0-9]+\.[0-9]+/
   capture: /[0-9]+\.[0-9]/
@@ -94,7 +96,7 @@ This can be done with the `label` argument.
 For instance, what if we want to the `find_by_xpath` function to return the token
 `in_stock` if we use it to find that the item is in stock. We'd do that as follows:
 ```ruby
-find_by_xpath(
+buzz.find_by_xpath(
   xpath: '//div[@id="product2-details"]//li',
   pattern: /Status: In-stock/
   label: 'in_stock'
@@ -104,7 +106,7 @@ find_by_xpath(
 These examples are contrived, but you get the idea.
 
 ### collect_by_xpath
-Consider the `<ul>` of product details above. Let's say that I want
+Consider the list of product details above. Let's say that I want
 it capture and store those details as a human-readable string. If I have a `Nokogiri::Document` called
 `doc` with the above HTML in it, then look at the following:
 
@@ -115,7 +117,7 @@ doc.xpath("//div[@id='product2-details']//li").text
 All of the nodes are crammed together, but it would be nice if I could insert
 a space in between them. That's one place where `collect_by_xpath` helps.
 ```ruby
-collect_by_xpath(
+buzz.collect_by_xpath(
   xpath: "//div[@id='product2-details']//li",
   join: ' '
 )
