@@ -31,10 +31,11 @@ bit of matching text at a matching xpath. That's why `find_by_xpath` is the work
 of this query DSL.
 
 This method takes the following arguments:
- - `xpath`: The xpath query string of the nodes that you want to search for a given pattern.
+ - `xpath`: The xpath query string of the nodes that you want to search for a given pattern. This argument is mandatory.
  - `match`: A regex that the text of the xpath node should match.
  - `capture`: A regex that pulls only the matching text out of the matched string and returns it.
  - `pattern`: If the `pattern` argument is present, then `match = capture = pattern`.
+ - `label`: If this is present, then any positive match will return the string supplied by this argument.
 
 Here's a look at how `find_by_xpath` works in practice.
 
@@ -64,7 +65,7 @@ You might use `find_by_xpath` as follows:
 ```ruby
 find_by_xpath(
   xpath: '//div[@id="product2-details"]//li',
-  pattern: /\$[0-9]+\.[0-9]+/i
+  pattern: /\$[0-9]+\.[0-9]+/
 )
 #=> "$12.99"
 ```
@@ -72,8 +73,8 @@ If for whatever reason you wanted that entire price node, you could do:
 
 ```ruby
 find_by_xpath(
-  xpath: '//div[@id="product2-details"]',
-  match: /\$[0-9]+\.[0-9]+/i
+  xpath: '//div[@id="product2-details"]//li',
+  match: /\$[0-9]+\.[0-9]+/
 )
 #=> "Price: $12.99"
 ```
@@ -81,11 +82,24 @@ Now let's say that you only want "12.99", without the dollar sign. You could do
 that as follows:
 ```ruby
 find_by_xpath(
-  xpath: '//div[@id="product2-details"]',
-  match: /\$[0-9]+\.[0-9]+/i
-  capture: /[0-9]+\.[0-9]/i
+  xpath: '//div[@id="product2-details"]//li',
+  match: /\$[0-9]+\.[0-9]+/
+  capture: /[0-9]+\.[0-9]/
 )
 #=> "12.99"
+```
+Sometimes you might want to return a specific bit of text if you find a match on a page.
+This can be done with the `label` argument.
+
+For instance, what if we want to the `find_by_xpath` function to return the token
+`in_stock` if we use it to find that the item is in stock. We'd do that as follows:
+```ruby
+find_by_xpath(
+  xpath: '//div[@id="product2-details"]//li',
+  pattern: /Status: In-stock/
+  label: 'in_stock'
+)
+#=> in_stock
 ```
 These examples are contrived, but you get the idea.
 
@@ -98,10 +112,8 @@ it capture and store those details as a human-readable string. If I have a `Noko
 doc.xpath("//div[@id='product2-details']//li").text
 #=> Status: In-stockUPC: 00110012232SKU: ITEM-2Price: $12.99
 ```
-
 All of the nodes are crammed together, but it would be nice if I could insert
 a space in between them. That's one place where `collect_by_xpath` helps.
-
 ```ruby
 collect_by_xpath(
   xpath: "//div[@id='product2-details']//li",
@@ -109,9 +121,20 @@ collect_by_xpath(
 )
 #=> Status: In-stock UPC: 00110012232 SKU: ITEM-2 Price: $12.99
 ```
-This method also takes the same `match`, `capture`, and `pattern` arguments
-as `find_by_xpath`, and they do the same thing.
+The `collect_by_xpath` function finds all of the matching nodes and concatenates
+their text, using the character(s) supplied by optional `join` as a delimiter.
 
+This method also takes the same `match`, `capture`, and `pattern` arguments
+as `find_by_xpath`, and they do the same thing. You can use the `match` argument to
+collect only matching nodes, and the `capture` argument to filter the final string.
+
+Finally, this function also takes the `label` argument.
+### find_in_table
+This method is useful for pulling text out of tables, one of the most annoying
+jobs in web scraping. The `find_in_table` method takes the following arguments:
+
+ - `row`: Either a regex for matching a row, or an integer row index. This argument is mandatory.
+ - `column`: Either a regex for matching a column, or an integer column index.
 
 ## Contributing
 
