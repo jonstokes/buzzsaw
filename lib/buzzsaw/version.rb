@@ -1,3 +1,3 @@
-module Riffler
+module Buzzsaw
   VERSION = "0.0.1"
 end

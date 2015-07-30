@@ -5,7 +5,7 @@ require 'active_support/all'
 require 'htmlentities'
 require 'stringex'
 require 'nokogiri'
-require 'riffler'
+require 'buzzsaw'
 
 RSpec.configure do |config|
   config.order = 'random'

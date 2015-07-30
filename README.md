@@ -1,4 +1,4 @@
-# Riffler
+# Buzzsaw
 
 A DSL that wraps around `Nokogiri` and is used by stretched.io for web scraping.
 
@@ -7,7 +7,7 @@ A DSL that wraps around `Nokogiri` and is used by stretched.io for web scraping.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'riffler'
+gem 'buzzsaw'
 ```
 
 And then execute:
@@ -16,7 +16,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install riffler
+    $ gem install Buzzsaw
 
 ## Usage
 
@@ -138,7 +138,7 @@ jobs in web scraping. The `find_in_table` method takes the following arguments:
 
 ## Contributing
 
-1. Fork it ( https://github.com/jonstokes/riffler/fork )
+1. Fork it ( https://github.com/jonstokes/Buzzsaw/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)

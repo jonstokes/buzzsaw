@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 class QueryDoc
-  include Riffler
+  include Buzzsaw
   attr_reader :doc
   attr_reader :url
 
@@ -11,7 +11,7 @@ class QueryDoc
   end
 end
 
-RSpec.describe Riffler do
+RSpec.describe Buzzsaw do
 
   let(:file_name) { 'sample.html' }
   let(:base_doc)  {

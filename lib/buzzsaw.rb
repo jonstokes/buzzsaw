@@ -1,6 +1,6 @@
-require "riffler/version"
+require "buzzsaw/version"
 
-module Riffler
+module Buzzsaw
 
   ENCODING_EXCEPTION = defined?(Java) ? Java::JavaNioCharset::UnsupportedCharsetException : Encoding::CompatibilityError
 

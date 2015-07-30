@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'riffler/version'
+require 'buzzsaw/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "riffler"
-  spec.version       = Riffler::VERSION
+  spec.name          = "buzzsaw"
+  spec.version       = Buzzsaw::VERSION
   spec.authors       = ["Jon Stokes"]
   spec.email         = ["jon@jonstokes.com"]
   spec.summary       = %q{A web scraping DSL built on Nokogiri}
